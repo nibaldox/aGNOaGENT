@@ -30,8 +30,8 @@ current_date = datetime.datetime.now().strftime("%Y-%m-%d")
 web_agent = Agent(
     name="Web Agent",
     role="deep web search for information",
-    #model=Gemini(id="gemini-2.5-flash-preview-05-20"),
-    model=Ollama(id="qwen3:14b-q8_0"),
+    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    #model=Ollama(id="devstral:latest"),
     tools=[DuckDuckGoTools()],
     instructions=dedent(f"""\
     Current date: {current_date} 
@@ -62,8 +62,8 @@ web_agent = Agent(
 finance_agent = Agent(
     name="Finance Agent",
     role="deep financial data analysis",
-    #model=Gemini(id="gemini-2.5-flash-preview-05-20"),
-    model=Ollama(id="qwen3:14b-q8_0"),
+    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    #model=Ollama(id="devstral:latest"),
     tools=[YFinanceTools(stock_price=True, 
                         analyst_recommendations=True, 
                         company_info=True,
@@ -102,8 +102,8 @@ agent_team = Team(
     mode="coordinate",  # modes: route, collaborate, coordinate
     members=[web_agent, finance_agent],
     tools=[ReasoningTools(add_instructions=True), PythonTools()],   
-    #model=Gemini(id="gemini-2.5-flash-preview-05-20"),
-    model=Ollama(id="qwen3:14b-q8_0"),
+    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    #model=Ollama(id="qwen3:14b-q8_0"),
     success_criteria=(
         "A comprehensive report with clear sections "
         "and data-driven insights."
@@ -178,9 +178,9 @@ while True:
 
     agent_team.print_response(
         message=user_message,
-        stream=False,
-        #show_full_reasoning=True,
-        #stream_intermediate_steps=True,
+        stream=True,
+        show_full_reasoning=True,
+        stream_intermediate_steps=True,
     )
 
     # Opcional: Preguntar explícitamente si desea continuar, aunque el prompt ya lo sugiere.

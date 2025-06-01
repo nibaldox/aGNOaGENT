@@ -6,7 +6,7 @@ from agno.tools.duckduckgo import DuckDuckGoTools
 
 # Creamos un agente que puede buscar en la web usando DuckDuckGo
 agente = Agent(
-    model=Ollama(id="qwen3:4b-fp16"),
+    model=Ollama(id="devstral:latest"),
     tools=[DuckDuckGoTools()],
     instructions=[
         "Responde de manera clara y concisa.",
@@ -18,4 +18,4 @@ agente = Agent(
 )
 
 # Consulta que requiere búsqueda en la web
-agente.print_response("¿que es agno agi agents?", stream=True, )
+agente.print_response("¿que es agno-agi agents?", stream=True, )
