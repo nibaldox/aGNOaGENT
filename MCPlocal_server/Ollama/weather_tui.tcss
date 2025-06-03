@@ -1,0 +1,50 @@
+/* weather_tui.tcss */
+
+Screen {
+    align: center middle;
+    background: $panel-darken-1;
+}
+
+Header {
+    dock: top;
+    background: $primary-background;
+    color: $text;
+    padding: 0 1;
+}
+
+Footer {
+    dock: bottom;
+    background: $primary-background-darken-1;
+    color: $text-muted;
+    padding: 0 1;
+    height: 1;
+}
+
+#input_area {
+    dock: top;
+    padding: 1;
+    height: auto;
+    background: $surface;
+}
+
+Input {
+    width: 1fr;
+    margin-right: 1;
+}
+
+Button {
+    width: auto;
+    min-width: 18;
+}
+
+#results_area {
+    padding: 0 1;
+    background: $surface-lighten-1;
+}
+
+Markdown {
+    padding: 1;
+    background: $surface;
+    border: round $primary;
+    /* Espera que el contenido sea desplazable si es muy largo */
+}
