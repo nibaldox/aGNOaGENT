@@ -147,3 +147,13 @@ lerna-debug.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+*.so
+.env
+venv/
+build/
+dist/
+*.sqlite
+*.db
+
+

@@ -21,8 +21,14 @@ from agno.team import Team
 from agno.models.google import Gemini
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
+from agno.memory.v2.db.sqlite import SqliteMemoryDb
+from agno.memory.v2.memory import Memory
 
 current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+
+# ========== Configuración de Memoria Persistente ==========
+memory_db = SqliteMemoryDb(table_name="business_analysis_memory", db_file="business_analysis_memory.db")
+persistent_memory = Memory(db=memory_db)
 
 # ========== Definición de Agentes ==========
 
@@ -36,6 +42,7 @@ innovador_tech = Agent(
         Eres 'El Innovador Tech', un IA visionario. 
         Tu objetivo es proponer ideas audaces y tecnológicamente avanzadas, sin preocuparte inicialmente por las limitaciones. 
         Piensa en el futuro y en cómo la tecnología puede resolver grandes problemas. Sé conciso y directo.
+        Tienes acceso a internet y puedes utilizar herramientas de búsqueda externas (como DuckDuckGo) para fundamentar, validar o enriquecer tus respuestas y propuestas.
 
         Guía de comportamiento:
         - Participa activamente en la discusión, aportando ideas innovadoras y tecnológicas.
@@ -59,6 +66,7 @@ analista_critica = Agent(
         Eres 'La Analista Crítica', una IA con un profundo conocimiento técnico y de negocios. 
         Tu función es examinar las ideas propuestas, identificar posibles fallos, riesgos, desafíos de implementación, 
         y consideraciones éticas. Sé rigurosa, detallada y concisa en tus análisis.
+        Tienes acceso a internet y puedes utilizar herramientas de búsqueda externas (como DuckDuckGo) para validar datos, buscar referencias o enriquecer tus observaciones y críticas.
 
         Guía de comportamiento:
         - Participa activamente en la discusión, aportando análisis críticos y objetivos.
@@ -83,6 +91,7 @@ estratega_pragmatico = Agent(
         Tomas las ideas innovadoras y las críticas, y buscas formular un plan de acción realista. 
         Consideras recursos, mercado, pasos incrementales y cómo llevar una idea a la realidad. 
         Ofrece soluciones concretas y concisas.
+        Tienes acceso a internet y puedes utilizar herramientas de búsqueda externas (como DuckDuckGo) para fundamentar tus estrategias, validar tendencias de mercado o enriquecer tus planes de acción.
 
         Guía de comportamiento:
         - Participa activamente en la discusión, aportando planes de acción y estrategias realistas.
@@ -109,6 +118,7 @@ moderador = Agent(
         pedir al menos 2-3 intervenciones de cada uno y entregar una conclusión equilibrada.
         Tu respuesta final debe estar en español, ser clara y no tomar partido. 
         Resume los aportes y ofrece una visión integradora para la mejora de la idea analizada.
+        Tienes acceso a internet y puedes utilizar herramientas de búsqueda externas (como DuckDuckGo) para validar hechos, enriquecer tus resúmenes o aportar contexto relevante durante la moderación.
 
         Guía de comportamiento:
         - Participa activamente en la discusión, asegurando que cada agente tenga la oportunidad de aportar.
@@ -128,7 +138,7 @@ moderador = Agent(
 equipo_negocio = Team(
     name="Equipo de Análisis de Negocio",
     mode="collaborate",
-    members=[innovador_tech, analista_critica, estratega_pragmatico],
+    members=[innovador_tech, analista_critica, estratega_pragmatico, moderador],
     model=Gemini(id="gemini-2.5-flash-preview-05-20"),
     tools=[ReasoningTools(add_instructions=True,think=True,analyze=True)],
     success_criteria=(
@@ -141,9 +151,10 @@ equipo_negocio = Team(
     add_datetime_to_instructions=True,
     show_tool_calls=True,
     markdown=True,
-    enable_agentic_context=True,
-    enable_agentic_memory=True,
-    num_history_runs=5,
+    memory=persistent_memory,  # Añadido para memoria persistente
+    enable_team_history=True,  # Actualizado de enable_agentic_context
+    enable_agentic_memory=True, # Mantenido para habilitar la funcionalidad de memoria
+    num_of_interactions_from_history=5, # Actualizado de num_history_runs
     show_members_responses=True,
 )
 

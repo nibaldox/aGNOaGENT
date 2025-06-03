@@ -1,0 +1,26 @@
+# Plan de Implementación: Equipo de Depuración Matemática
+
+## Objetivo
+
+Crear un equipo de agentes Agno-Agi especializado en el análisis y depuración de ideas matemáticas, basado en la estructura del [business_team.py](cci:7://file:///d:/12_WindSurf/21_aGNOaGENT/09_research_team/business_team.py:0:0-0:0) existente.
+
+## Tareas
+
+- [x] Crear archivo `.gitignore` con exclusiones para Python y archivos `.db`. (Realizado por Cascade)
+- [ ] **Definir Agentes Matemáticos:**
+  - [ ] El Teórico Formal (rigurosidad, pruebas, lógica)
+  - [ ] El Calculista Práctico/Computacional (ejemplos, contraejemplos, verificación)
+  - [ ] El Intuitivo Creativo (conexiones, generalizaciones, nuevas perspectivas)
+  - [ ] El Moderador Matemático (guía la discusión, sintetiza hallazgos)
+- [ ] **Crear Script `math_debug_team.py`:**
+  - [ ] Copiar y adaptar la estructura de [business_team.py](cci:7://file:///d:/12_WindSurf/21_aGNOaGENT/09_research_team/business_team.py:0:0-0:0).
+  - [ ] Implementar los agentes matemáticos definidos.
+  - [ ] Configurar el `Equipo de Depuración Matemática` (modo colaborativo, miembros, herramientas, memoria persistente `math_debug_memory.db`).
+  - [ ] Adaptar el bucle principal para solicitar ideas matemáticas.
+- [ ] **Actualizar [README.md](cci:7://file:///d:/12_WindSurf/21_aGNOaGENT/09_research_team/README.md:0:0-0:0):**
+  - [ ] Añadir una sección explicando el nuevo equipo `math_debug_team.py`.
+  - [ ] Incluir instrucciones de uso y ejemplos de ideas matemáticas.
+- [ ] **Pruebas:**
+  - [ ] Ejecutar `math_debug_team.py` con varias ideas matemáticas.
+  - [ ] Verificar la interacción de los agentes y la calidad de los análisis.
+  - [ ] Confirmar que la memoria persistente funciona.
