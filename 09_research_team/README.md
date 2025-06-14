@@ -15,12 +15,14 @@ Este repositorio contiene herramientas y scripts para la orquestación de equipo
 
 ### ¿Qué hace?
 
-Permite analizar cualquier idea de negocio con un equipo de tres agentes IA:
+Permite analizar cualquier idea de negocio con un equipo de **seis agentes IA especializados**:
 
 - **El Innovador Tech**: Propone ideas audaces y tecnológicas.
 - **La Analista Crítica**: Identifica riesgos, fallos y desafíos.
 - **El Estratega Pragmático**: Sugiere planes de acción realistas.
-- **Moderador**: Facilita la discusión, fomenta la participación y entrega una conclusión integradora.
+- **El Investigador de Mercado**: Aporta métricas de mercado, benchmarking de competidores y tendencias, citando fuentes confiables.
+- **El Consejero Legal**: Evalúa regulación, propiedad intelectual y riesgos de cumplimiento, proponiendo estrategias legales y de mitigación.
+- **Moderador**: Facilita la discusión, asegura la participación equitativa y sintetiza los hallazgos en una conclusión integradora.
 
 Todos los agentes siguen guías de comportamiento explícitas para asegurar profesionalismo, respeto y foco en el análisis constructivo.
 
