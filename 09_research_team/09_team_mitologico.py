@@ -9,7 +9,9 @@ from textwrap import dedent
 from agno.team import Team
 from agno.agent import Agent
 
-from agno.models.google import Gemini
+#from agno.models.deepseek import DeepSeek
+from agno.models.openai import OpenAIChat
+#from agno.models.google import Gemini
 # from agno.models.ollama import Ollama # Puedes descomentar esto si prefieres usar Ollama
 
 # ## MODIFICADO ##: No necesitaremos todas estas herramientas, pero dejamos DuckDuckGo por si los agentes quieren buscar datos.
@@ -26,7 +28,7 @@ current_date = datetime.datetime.now().strftime("%Y-%m-%d")
 greek_champion = Agent(
     name="Campeón Griego",
     role="Defensor del panteón de dioses griegos",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="gpt-4o-mini-2024-07-18"),
     tools=[DuckDuckGoTools()], # Por si necesita buscar un dato específico sobre mitología
     instructions=dedent(f"""\
         Current date: {current_date}
@@ -50,7 +52,7 @@ greek_champion = Agent(
 norse_champion = Agent(
     name="Campeón Nórdico",
     role="Defensor del panteón de dioses nórdicos",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="gpt-4o-mini-2024-07-18"),
     tools=[DuckDuckGoTools()], # Por si necesita buscar un dato específico sobre las Eddas
     instructions=dedent(f"""\
         Current date: {current_date}
@@ -70,15 +72,36 @@ norse_champion = Agent(
     markdown=True,
 )
 
+# ## MODIFICADO ##: Agente Pirata Burlón
+pirate_agent = Agent(
+    name="Pirata Burlón",
+    role="Heckler pirata que se burla de los otros oradores",
+    model=OpenAIChat(id="gpt-4o-mini-2024-07-18"),
+    tools=[DuckDuckGoTools()],
+    instructions=dedent(f"""\
+        Current date: {current_date}
+        ¡Arrr, grumetes! Eres un pirata pendenciero que interrumpe el debate con burlas y comentarios sarcásticos.
+
+        Tu misión es hacer la conversación más entretenida:
+        1.  Cuando alguien haga un punto serio, responde con un chiste o burla estilo pirata.
+        2.  Usa expresiones como "¡Argh!", "¡Yarr!" o "¡Bribón de agua dulce!".
+        3.  No presentes argumentos propios serios; tu rol es molestar respetuosamente y añadir humor.
+        4.  No seas ofensivo ni vulgar; mantén un tono juguetón y amistoso.
+        5.  Después de cada intervención, anima al público con una risa pirata.
+    """),
+    show_tool_calls=True,
+    markdown=True,
+)
+
 # ## MODIFICADO ##: Equipo de debate mitológico
 mythology_debate_team = Team(
     name="Moderador del Debate",
     mode="collaborate",  # ## MODIFICADO ##: El modo colaborativo es ideal para un debate.
-    members=[greek_champion, norse_champion], # El moderador interactúa con estos miembros
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    members=[greek_champion, pirate_agent, norse_champion], # El moderador interactúa con estos miembros
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     success_criteria=(
         "Un debate bien estructurado donde cada parte presenta sus argumentos "
-        "y el moderador entrega una conclusión final, imparcial y bien razonada."
+        "y el moderador entrega una conclusión final, imparcial y bien razonada.  en la que se define un ganador."
     ),
     instructions=dedent(f"""\
         Current date: {current_date}
@@ -93,12 +116,13 @@ mythology_debate_team = Team(
         6.  Una vez que ambos han presentado sus puntos, tu tarea principal es redactar una conclusión final.
         
         Guía para la conclusión final:
-        - Antes de terminar, olicita a lo menos 3 respuestas de cada agente.
+        - Antes de terminar, solicita a lo menos 3 respuestas de cada agente.
         - Debe ser imparcial y equilibrada.
         - Resume los puntos fuertes de cada panteón presentados por los campeones.
         - Ofrece una perspectiva matizada sobre por qué diferentes culturas valorarían a cada grupo de deidades.
-        - No declares un "ganador". El objetivo es el análisis comparativo.
+        - simepre debes declarar un "ganador". El objetivo es el análisis comparativo y la competencia.
         - Usa markdown para formatear tu respuesta final de manera clara.
+        - una vez que se declaret el ganador, debes narrar que hicieron los campeones nordico y griego (reaccion, etc)
         - Termina declarando formalmente el debate como cerrado.
 """),
     add_datetime_to_instructions=True,
@@ -106,30 +130,42 @@ mythology_debate_team = Team(
     markdown=True,
     # Estas opciones son excelentes para ver el proceso interno del debate
     enable_agentic_context=True,
-    enable_agentic_memory=True,
-    num_history_runs=5, # Aumentamos un poco por si el debate se alarga
+    enable_agentic_memory=True, 
+    num_history_runs=10,  # Ajustado para un debate moderado
     show_members_responses=True,
 )
 
-while True:
-    ## MODIFICADO ##: Ajustamos el prompt de entrada para el nuevo tema.
-    user_message = input("\nIntroduce el tema del debate mitológico (o escribe 'salir' para terminar): ")
-    if user_message.lower() in ['salir', 'exit', 'quit', 'no', 'n']:
-        print("Hasta luego. ¡Gracias por presenciar el debate de los dioses!")
-        try:
-            del greek_champion
-            del norse_champion
-            del mythology_debate_team
-            import gc
-            gc.collect()
-            print("Recursos de agentes liberados.")
-        except NameError:
-            pass 
-        break
+def _log_debate(topic: str, response: str) -> None:
+    """Append the debate topic and response to a markdown log file."""
+    log_path = "debate_mitologico_log.md"
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(f"## Tema: {topic}\n\n{response}\n\n---\n\n")
 
-    mythology_debate_team.print_response(
-        message=user_message,
-        stream=True,
-        show_full_reasoning=True,
-        stream_intermediate_steps=True,
-    )
+
+def main() -> None:
+    """Loop de interacción principal para el debate mitológico."""
+    print("Bienvenido al debate de los dioses. Escribe 'salir' para terminar.")
+    try:
+        while True:
+            topic = input("\nIntroduce el tema del debate mitológico: ")
+            if topic.lower() in {"salir", "exit", "quit", "no", "n"}:
+                print("Hasta luego. ¡Gracias por presenciar el debate de los dioses!")
+                break
+
+            response = mythology_debate_team.run(topic)
+            mythology_debate_team.print_response(
+                message=topic,
+                stream=True,
+                show_full_reasoning=True,
+                stream_intermediate_steps=True,
+            )
+            _log_debate(topic, str(response))
+    except KeyboardInterrupt:
+        print("\nDebate interrumpido por el usuario. Cerrando...")
+    finally:
+        # No es necesario eliminar explícitamente; Python liberará recursos al finalizar.
+        pass
+
+
+if __name__ == "__main__":
+    main()

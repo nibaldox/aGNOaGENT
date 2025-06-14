@@ -18,7 +18,8 @@ import datetime
 
 from agno.agent import Agent
 from agno.team import Team
-from agno.models.google import Gemini
+#from agno.models.google import Gemini
+from agno.models.openai import OpenAIChat
 from agno.tools.duckduckgo import DuckDuckGoTools
 from agno.tools.reasoning import ReasoningTools
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
@@ -35,7 +36,7 @@ persistent_memory = Memory(db=memory_db)
 innovador_tech = Agent(
     name="El Innovador Tech",
     role="IA visionario que propone ideas audaces y tecnológicamente avanzadas.",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     tools=[DuckDuckGoTools()],
     instructions=dedent(f"""
         Current date: {current_date}
@@ -51,6 +52,12 @@ innovador_tech = Agent(
         - Escucha los aportes de los demás antes de responder, considerando sus perspectivas y experiencias.
         - No repitas argumentos ya mencionados, busca agregar valor a la discusión con cada intervención.
         - Mantén el foco en el análisis crítico y constructivo de la idea de negocio, evitando divagar o desviarte del tema.
+        
+        ## Directrices Avanzadas D4:
+        - Aplica marcos profesionales (Design Thinking, Lean Startup, TRIZ).
+        - Utiliza métricas cuantitativas (TAM, CAGR, ROI) y cita fuentes reputadas (IEEE, Gartner).
+        - Integra análisis de impacto ESG y regulatorio (GDPR, ISO 27001).
+        - Presenta un razonamiento paso a paso y utiliza tablas/diagramas en Markdown cuando sea útil.
     """),
     show_tool_calls=True,
     markdown=True,
@@ -59,7 +66,7 @@ innovador_tech = Agent(
 analista_critica = Agent(
     name="La Analista Crítica",
     role="IA con profundo conocimiento técnico y de negocios. Analiza riesgos, fallos y ética.",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     tools=[DuckDuckGoTools()],
     instructions=dedent(f"""
         Current date: {current_date}
@@ -75,6 +82,12 @@ analista_critica = Agent(
         - Escucha los aportes de los demás antes de responder, considerando sus perspectivas y experiencias.
         - No repitas argumentos ya mencionados, busca agregar valor a la discusión con cada intervención.
         - Mantén el foco en el análisis crítico y constructivo de la idea de negocio, evitando divagar o desviarte del tema.
+        
+        ## Directrices Avanzadas D4:
+        - Aplica marcos profesionales (Design Thinking, Lean Startup, TRIZ).
+        - Utiliza métricas cuantitativas (TAM, CAGR, ROI) y cita fuentes reputadas (IEEE, Gartner).
+        - Integra análisis de impacto ESG y regulatorio (GDPR, ISO 27001).
+        - Presenta un razonamiento paso a paso y utiliza tablas/diagramas en Markdown cuando sea útil.
     """),
     show_tool_calls=True,
     markdown=True,
@@ -83,7 +96,7 @@ analista_critica = Agent(
 estratega_pragmatico = Agent(
     name="El Estratega Pragmático",
     role="IA enfocada en viabilidad y ejecución realista de ideas.",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     tools=[DuckDuckGoTools()],
     instructions=dedent(f"""
         Current date: {current_date}
@@ -101,6 +114,12 @@ estratega_pragmatico = Agent(
         - No repitas argumentos ya mencionados, busca agregar valor a la discusión con cada intervención.
         - Mantén el foco en el análisis crítico y constructivo de la idea de negocio, evitando divagar o desviarte del tema.
         - Sé breve y evita divagar.
+        
+        ## Directrices Avanzadas D4:
+        - Aplica marcos profesionales (Design Thinking, Lean Startup, TRIZ).
+        - Utiliza métricas cuantitativas (TAM, CAGR, ROI) y cita fuentes reputadas (IEEE, Gartner).
+        - Integra análisis de impacto ESG y regulatorio (GDPR, ISO 27001).
+        - Presenta un razonamiento paso a paso y utiliza tablas/diagramas en Markdown cuando sea útil.
     """),
     show_tool_calls=True,
     markdown=True,
@@ -109,7 +128,7 @@ estratega_pragmatico = Agent(
 moderador = Agent(
     name="Moderador",
     role="Facilitador imparcial del análisis y la discusión.",
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     tools=[DuckDuckGoTools()],
     instructions=dedent(f"""
         Current date: {current_date}
@@ -128,6 +147,60 @@ moderador = Agent(
         - No repitas argumentos ya mencionados, busca agregar valor a la discusión con cada intervención.
         - Mantén el foco en el análisis crítico y constructivo de la idea de negocio, evitando divagar o desviarte del tema.
         - Asegura que la discusión sea respetuosa y profesional en todo momento.
+        - Emplea técnicas de facilitación avanzadas (Delphi, rondas de consenso, time-boxing) para optimizar el intercambio.
+        - Gestiona el tiempo asignando intervalos de intervención de 2 minutos por agente y usando recordatorios.
+        - Resume los puntos clave siguiendo la estructura Problema → Análisis → Recomendación y cita las mejores prácticas.
+        
+        ## Directrices Avanzadas D4:
+        - Aplica marcos profesionales (Design Thinking, Lean Startup, TRIZ).
+        - Utiliza métricas cuantitativas (TAM, CAGR, ROI) y cita fuentes reputadas (IEEE, Gartner).
+        - Integra análisis de impacto ESG y regulatorio (GDPR, ISO 27001).
+        - Presenta un razonamiento paso a paso y utiliza tablas/diagramas en Markdown cuando sea útil.
+    """),
+    show_tool_calls=True,
+    markdown=True,
+)
+
+# ========== Agente Legal Experto ==========
+
+abogado_cumplimiento = Agent(
+    name="Consejero Legal",
+    role="Experto senior en derecho tecnológico y cumplimiento normativo (nivel D4).",
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
+    tools=[DuckDuckGoTools()],
+    instructions=dedent(f"""
+        Current date: {current_date}
+        Actúas como asesor legal sénior especializado en tecnología, privacidad y regulación internacional.
+
+        Guía D4:
+        - Evalúa legislación aplicable (GDPR, CCPA, Digital Services Act, AI Act, PCI-DSS, ISO/IEC 27001, 27701).
+        - Identifica riesgos jurídicos, de responsabilidad y de propiedad intelectual.
+        - Recomienda estrategias de cumplimiento, cláusulas contractuales y licencias.
+        - Elabora planes de acción con responsables, cronograma y métricas de seguimiento.
+        - Cita artículos o recitals relevantes y resume precedentes jurisprudenciales cuando aplique.
+        - Presenta conclusiones en bullet points claros usando Markdown.
+    """),
+    show_tool_calls=True,
+    markdown=True,
+)
+
+# ========== Agente de Investigación y Benchmarking ==========
+
+investigador_mercado = Agent(
+    name="Investigador de Mercado",
+    role="Especialista en inteligencia competitiva, datos de mercado y tendencias tecnológicas (nivel D4).",
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
+    tools=[DuckDuckGoTools()],
+    instructions=dedent(f"""
+        Current date: {current_date}
+        Actúas como analista sénior de mercado con acceso a reportes de consultoras (Gartner, McKinsey, IDC) y literatura académica.
+
+        Guía D4:
+        - Recopila métricas clave (TAM, CAGR, LTV/CAC) y compara competidores.
+        - Detecta tecnologías emergentes y patentes relevantes.
+        - Presenta tablas comparativas, gráficos ASCII o diagramas en Markdown.
+        - Cita fuentes primarias y secundarias con enlaces y fechas.
+        - Provee insights accionables para Innovador, Crítica, Estratega y Legal.
     """),
     show_tool_calls=True,
     markdown=True,
@@ -138,15 +211,26 @@ moderador = Agent(
 equipo_negocio = Team(
     name="Equipo de Análisis de Negocio",
     mode="collaborate",
-    members=[innovador_tech, analista_critica, estratega_pragmatico, moderador],
-    model=Gemini(id="gemini-2.5-flash-preview-05-20"),
+    members=[innovador_tech, analista_critica, estratega_pragmatico, investigador_mercado, abogado_cumplimiento, moderador],
+    model=OpenAIChat(id="o4-mini-2025-04-16"),
     tools=[ReasoningTools(add_instructions=True,think=True,analyze=True)],
     success_criteria=(
-        "Un análisis crítico y constructivo de la idea, con propuestas de mejora y un plan de acción realista."
+        "1. Diagnóstico 360°: análisis crítico y constructivo abarcando tecnología, mercado, riesgos legales y ESG;\n"
+        "2. Convergencia de expertos: mínimo 2 intervenciones sustanciales por agente, citando fuentes y datos cuantitativos;\n"
+        "2.5 Insights de mercado validados con fuentes primarias y secundarias;\n"
+        "3. Roadmap SMART: plan de acción con KPIs, responsables, cronograma (90 días, 1 y 3 años) y estimaciones financieras (ROI, NPV);\n"
+        "4. Cumplimiento normativo: recomendaciones claras para alcanzar conformidad con GDPR/IA Act/ISO 27001;\n"
+        "5. Entregable claro: síntesis en Markdown con tablas, diagramas y referencias bibliográficas, seguida de próximos pasos accionables."
     ),
     instructions=dedent(f"""
         Current date: {current_date}
         El objetivo del equipo es analizar ideas de negocio de forma crítica, ofrecer mejoras y planes según crean necesario. Cada agente debe aportar desde su especialidad y el moderador debe asegurar una discusión equilibrada y productiva.
+        
+        ## Directrices Avanzadas D4:
+        - Aplica marcos profesionales (Design Thinking, Lean Startup, TRIZ).
+        - Utiliza métricas cuantitativas (TAM, CAGR, ROI) y cita fuentes reputadas (IEEE, Gartner).
+        - Integra análisis de impacto ESG y regulatorio (GDPR, ISO 27001).
+        - Presenta un razonamiento paso a paso y utiliza tablas/diagramas en Markdown cuando sea útil.
     """),
     add_datetime_to_instructions=True,
     show_tool_calls=True,
@@ -158,16 +242,25 @@ equipo_negocio = Team(
     show_members_responses=True,
 )
 
-if __name__ == "__main__":
+def main() -> None:
+    """Bucle principal para interactuar con el equipo de análisis de negocio."""
     print("\n=== Análisis de Ideas de Negocio ===")
-    while True:
-        idea = input("\nIntroduce una idea de negocio para analizar (o escribe 'salir'): ")
-        if idea.strip().lower() in ["salir", "exit", "no", "n", "quit"]:
-            print("Hasta luego. ¡Gracias por usar el equipo de análisis!")
-            break
-        equipo_negocio.print_response(
-            message=idea,
-            stream=True,
-            show_full_reasoning=True,
-            stream_intermediate_steps=True,
-        )
+    try:
+        while True:
+            idea = input("\nIntroduce una idea de negocio para analizar (o escribe 'salir'): ")
+            if idea.strip().lower() in {"salir", "exit", "no", "n", "quit"}:
+                print("Hasta luego. ¡Gracias por usar el equipo de análisis!")
+                break
+            equipo_negocio.print_response(
+                message=idea,
+                stream=True,
+                show_full_reasoning=True,
+                stream_intermediate_steps=True,
+            )
+    except KeyboardInterrupt:
+        print("\nInterrupción detectada. Cerrando...")
+    finally:
+        pass
+
+if __name__ == "__main__":
+    main()
